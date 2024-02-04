@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 import { useState } from "react";
 
 // eslint-disable-next-line react/prop-types
-export default function MenuWrapper({ children, menuOption = [], user = {} }) {
+export default function MenuWrapper({ children, menuOption = [], data = {} }) {
     const [anchorEl, setAnchorEl] = useState(null);
     const open = Boolean(anchorEl);
     const handleClick = (event) => {
@@ -39,7 +39,7 @@ export default function MenuWrapper({ children, menuOption = [], user = {} }) {
                     menuOption.map((item, index) => (
                         <MenuItem
                             key={index}
-                            onClick={() => item.handleClick(user)}
+                            onClick={() => item.handleClick(data)}
                         >
                             {item.title}
                         </MenuItem>

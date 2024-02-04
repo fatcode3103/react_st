@@ -26,9 +26,10 @@ import ModalDetail from "./ModalDetail";
 function UserManagement() {
     const [open, setOpen] = useState(false);
     const [userEditClicked, setUserEditClicked] = useState(null);
+    const [userById, setUserById] = useState(null);
     const [isShowDetail, setIsShowDetail] = useState(false);
     const [roleOption, setRoleOption] = useState([]);
-    const [roleSelected, setRoleSelected] = useState("");
+    const [roleSelected, setRoleSelected] = useState(null);
 
     const { users, isLoading } = useSelector((state) => state.user);
     const { roles } = useSelector((state) => state.role);
@@ -47,6 +48,7 @@ function UserManagement() {
 
     useEffect(() => {
         if (userEditClicked) {
+            console.log(userEditClicked);
             setValue("name", userEditClicked.name);
             setValue("age", userEditClicked.age);
             setRoleSelected(userEditClicked.roleId);
@@ -85,7 +87,7 @@ function UserManagement() {
         setOpen(false);
         setValue("name", "");
         setValue("age", "");
-        setRoleSelected("");
+        setRoleSelected(null);
     };
 
     const buildSelect = (data) => {
@@ -94,14 +96,15 @@ function UserManagement() {
             data.forEach((item) => {
                 let obj = {};
                 obj.label = item.name;
-                obj.value = item.roleId;
+                obj.value = item.id;
                 options.push(obj);
             });
         }
         setRoleOption(options);
     };
 
-    const handleClickDetail = () => {
+    const handleClickDetail = (user) => {
+        setUserById(user);
         setIsShowDetail(true);
     };
 
@@ -138,9 +141,12 @@ function UserManagement() {
                 <tbody>
                     {users &&
                         users.length > 0 &&
-                        users.map((item) => {
+                        users.map((item, index) => {
                             return (
-                                <tr key={item.id} className="bg-gray-100">
+                                <tr
+                                    key={item.id}
+                                    className={index % 2 === 0 && `bg-gray-100`}
+                                >
                                     <td className="text-center py-2 px-4 border-b">
                                         {item.id}
                                     </td>
@@ -155,7 +161,7 @@ function UserManagement() {
                                     </td>
                                     <td className="text-center py-2 px-4 border-b">
                                         <Menu
-                                            user={item}
+                                            data={item}
                                             menuOption={menuOption}
                                         >
                                             <CiCircleMore className="m-auto text-2xl cursor-pointer" />
@@ -214,7 +220,7 @@ function UserManagement() {
                                         setRoleSelected(e.target.value)
                                     }
                                 >
-                                    <MenuItem value="">
+                                    <MenuItem value={null}>
                                         <em>None</em>
                                     </MenuItem>
                                     {roleOption &&
@@ -235,7 +241,6 @@ function UserManagement() {
                     </div>
                     <div className="text-right mt-6">
                         <Button
-                            loading
                             onClick={handleSubmit(onSubmit)}
                             variant="contained"
                         >
@@ -251,7 +256,11 @@ function UserManagement() {
                     </div>
                 </Box>
             </Modal>
-            <ModalDetail isOpen={isShowDetail} setIsOpen={setIsShowDetail} />
+            <ModalDetail
+                data={userById}
+                isOpen={isShowDetail}
+                setIsOpen={setIsShowDetail}
+            />
         </div>
     );
 }

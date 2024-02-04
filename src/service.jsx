@@ -24,3 +24,18 @@ export const updateUser = async (data) => {
     let res = await axios.put(`update-user`, data);
     return res;
 };
+
+export const addNewRole = async (data) => {
+    let res = await axios.post(`add-new-role`, data);
+    return res;
+};
+
+export const getPermissons = async () => {
+    let res = await axios.post(`get-permissions`);
+    return res;
+};
+
+export const deleteRole = async (roleId) => {
+    let res = await axios.delete(`delete-role?roleId=${roleId}`);
+    return res;
+};
