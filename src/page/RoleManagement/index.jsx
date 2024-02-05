@@ -15,6 +15,7 @@ import {
     getPermissionAction,
     postNewRoleAction,
     deleteRoleAction,
+    updateRoleAction,
 } from "../../redux/roleAction";
 import SelectMulti from "../../components/SelectMulti";
 import Tag from "../../components/Tag";
@@ -24,6 +25,8 @@ function RoleManagement() {
     const [open, setOpen] = useState(false);
     const [permissionArray, setPermissionArray] = useState(null);
     const [permissionSelected, setPermissionSelected] = useState([]);
+    const [editRole, setEditRole] = useState(null);
+    const [editPermissionOption, setEditPermissionOption] = useState([]);
 
     const { roles, isLoading, permissions } = useSelector(
         (state) => state.role
@@ -33,9 +36,23 @@ function RoleManagement() {
     const { register, handleSubmit, setValue } = useForm();
 
     const onSubmit = async (data) => {
-        await dispatch(
-            postNewRoleAction({ ...data, permissionId: permissionSelected })
-        );
+        if (editRole) {
+            const [additionId, removeId] = processedUpdating(
+                permissionSelected,
+                editRole.permissionId
+            );
+            const dataSend = {
+                ...data,
+                roleId: editRole.id,
+                additionId: additionId,
+                removeId: removeId,
+            };
+            await dispatch(updateRoleAction(dataSend));
+        } else {
+            await dispatch(
+                postNewRoleAction({ ...data, permissionId: permissionSelected })
+            );
+        }
         await dispatch(getRolesAction());
         handleClose();
     };
@@ -48,6 +65,16 @@ function RoleManagement() {
     useEffect(() => {
         buildSelect(permissions);
     }, [permissions]);
+
+    useEffect(() => {
+        if (editRole) {
+            setValue("name", editRole.name);
+            setEditPermissionOption(editRole.permissionName);
+        } else {
+            setValue("name", "");
+            setEditPermissionOption([]);
+        }
+    }, [editRole, setValue]);
 
     const style = {
         position: "absolute",
@@ -65,17 +92,17 @@ function RoleManagement() {
         setValue("name", "");
         setPermissionSelected([]);
         setOpen(false);
-    };
-
-    const handleClickDetail = () => {
-        console.log("detail");
+        setEditRole(null);
     };
 
     const handleDeleteRole = async (data) => {
         await dispatch(deleteRoleAction(data.id));
     };
 
-    const handleEditRole = () => {};
+    const handleEditRole = (data) => {
+        setEditRole(data);
+        handleOpen();
+    };
 
     const buildSelect = (data) => {
         const options = [];
@@ -90,8 +117,14 @@ function RoleManagement() {
         setPermissionArray(options);
     };
 
+    const processedUpdating = (curr, prev) => {
+        prev = prev.map(Number);
+        const additionId = curr.filter((item) => !prev.includes(item));
+        const removeId = prev.filter((item) => !curr.includes(item));
+        return [additionId, removeId];
+    };
+
     const menuOption = [
-        { title: "Detail", handleClick: handleClickDetail },
         { title: "Edit", handleClick: handleEditRole },
         { title: "Delete", handleClick: handleDeleteRole },
     ];
@@ -126,9 +159,9 @@ function RoleManagement() {
                                         {item.name}
                                     </td>
                                     <td className="text-center py-2 px-4 border-b">
-                                        {item.namePermission &&
-                                        item.namePermission.length > 0
-                                            ? item.namePermission.map(
+                                        {item.permissionName &&
+                                        item.permissionName.length > 0
+                                            ? item.permissionName.map(
                                                   (item, index) => (
                                                       <div
                                                           key={index}
@@ -173,7 +206,7 @@ function RoleManagement() {
                         variant="h6"
                         component="h2"
                     >
-                        Add new role
+                        {editRole ? "Update role" : "Add new role"}
                     </Typography>
                     <div className="grid grid-cols-1">
                         <Typography id="modal-modal-description" sx={{ mt: 2 }}>
@@ -190,6 +223,7 @@ function RoleManagement() {
                                 label="Permission"
                                 options={permissionArray}
                                 setValueSelected={setPermissionSelected}
+                                editOption={editPermissionOption}
                             />
                         </Typography>
                     </div>
@@ -205,7 +239,7 @@ function RoleManagement() {
                                     sx={{ marginRight: "10px" }}
                                 />
                             )}
-                            Save
+                            {editRole ? "Update" : "Save"}
                         </Button>
                     </div>
                 </Box>

@@ -56,9 +56,24 @@ const deleteRoleAction = createAsyncThunk(
     }
 );
 
+const updateRoleAction = createAsyncThunk(
+    "roles/updateRole",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await service.updateRole(data);
+            toast.success(response.message || "success");
+            return response.data;
+        } catch (e) {
+            toast.error(e || "failed");
+            rejectWithValue(e);
+        }
+    }
+);
+
 export {
     getRolesAction,
     postNewRoleAction,
     getPermissionAction,
     deleteRoleAction,
+    updateRoleAction,
 };

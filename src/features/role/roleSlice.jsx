@@ -5,6 +5,7 @@ import {
     postNewRoleAction,
     getPermissionAction,
     deleteRoleAction,
+    updateRoleAction,
 } from "../../redux/roleAction";
 
 const initialState = {
@@ -63,6 +64,18 @@ export const roleSlice = createSlice({
                 state.roles = action.payload;
             })
             .addCase(deleteRoleAction.rejected, (state, action) => {
+                state.isLoading = false;
+                console.error("Error code:", action.payload);
+            })
+            // update role
+            .addCase(updateRoleAction.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updateRoleAction.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.roles = action.payload;
+            })
+            .addCase(updateRoleAction.rejected, (state, action) => {
                 state.isLoading = false;
                 console.error("Error code:", action.payload);
             });

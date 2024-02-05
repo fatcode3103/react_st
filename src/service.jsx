@@ -39,3 +39,8 @@ export const deleteRole = async (roleId) => {
     let res = await axios.delete(`delete-role?roleId=${roleId}`);
     return res;
 };
+
+export const updateRole = async (data) => {
+    let res = await axios.put(`update-role`, data);
+    return res;
+};

@@ -33,9 +33,14 @@ export default function MultipleSelectChip({
     label,
     options = [],
     setValueSelected,
+    editOption = [],
 }) {
     const theme = useTheme();
-    const [selectedOption, setSelectedOption] = React.useState([]);
+    const [selectedOption, setSelectedOption] = React.useState(editOption);
+
+    React.useEffect(() => {
+        setSelectedOption(editOption);
+    }, [editOption]);
 
     React.useEffect(() => {
         const resValue = options
@@ -57,7 +62,6 @@ export default function MultipleSelectChip({
             <FormControl sx={{ width: 300 }}>
                 <InputLabel id="demo-multiple-chip-label">{label}</InputLabel>
                 <Select
-                    size="small"
                     labelId="demo-multiple-chip-label"
                     id="demo-multiple-chip"
                     multiple
