@@ -27,8 +27,8 @@ function ModalDetail({ data = {}, isOpen, setIsOpen }) {
                     User detail
                 </h1>
                 <div className="mt-5 gap-2 flex flex-col">
-                    <p>- Name: {data?.name || "-"}</p>
-                    <p>- Age: {data?.age || "-"}</p>
+                    <p>- Name: {data?.name || null}</p>
+                    <p>- Age: {data?.age || null}</p>
                     <p>- Role: {data?.role || "null"}</p>
                     <p>
                         - Permissions:{" "}
