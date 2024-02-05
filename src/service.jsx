@@ -44,3 +44,20 @@ export const updateRole = async (data) => {
     let res = await axios.put(`update-role`, data);
     return res;
 };
+
+export const postNewPermission = async (data) => {
+    let res = await axios.post(`add-new-permission`, data);
+    return res;
+};
+
+export const deletePermission = async (permissionId) => {
+    let res = await axios.delete(
+        `delete-permission?permissionId=${permissionId}`
+    );
+    return res;
+};
+
+export const updatePermission = async (data) => {
+    let res = await axios.put(`update-permission`, data);
+    return res;
+};

@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Home from "./page/Home";
 import UserManagement from "./page/UserManagement";
 import RoleManagement from "./page/RoleManagement";
+import PermissionManagement from "./page/PermissionManagement";
 
 function App() {
     return (
@@ -14,6 +15,10 @@ function App() {
                     <Route path="/home" element={<Home />} />
                     <Route path="/users" element={<UserManagement />} />
                     <Route path="/roles" element={<RoleManagement />} />
+                    <Route
+                        path="/permissions"
+                        element={<PermissionManagement />}
+                    />
                 </Routes>
             </BrowserRouter>
             <ToastContainer

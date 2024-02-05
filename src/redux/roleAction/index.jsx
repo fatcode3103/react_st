@@ -70,10 +70,55 @@ const updateRoleAction = createAsyncThunk(
     }
 );
 
+const postNewPermissionAction = createAsyncThunk(
+    "roles/newPermission",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await service.postNewPermission(data);
+            toast.success(response.message || "success");
+            return response.data;
+        } catch (e) {
+            toast.error(e || "failed");
+            rejectWithValue(e);
+        }
+    }
+);
+
+const deletePermissionAction = createAsyncThunk(
+    "roles/deletePermission",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await service.deletePermission(data);
+            toast.success(response.message || "success");
+            return response.data;
+        } catch (e) {
+            toast.error(e || "failed");
+            rejectWithValue(e);
+        }
+    }
+);
+
+const updatePermissionAction = createAsyncThunk(
+    "roles/updatePermission",
+    async (data, { rejectWithValue }) => {
+        try {
+            const response = await service.updatePermission(data);
+            toast.success(response.message || "success");
+            return response.data;
+        } catch (e) {
+            toast.error(e || "failed");
+            rejectWithValue(e);
+        }
+    }
+);
+
 export {
     getRolesAction,
     postNewRoleAction,
     getPermissionAction,
     deleteRoleAction,
     updateRoleAction,
+    postNewPermissionAction,
+    deletePermissionAction,
+    updatePermissionAction,
 };

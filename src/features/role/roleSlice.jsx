@@ -6,6 +6,9 @@ import {
     getPermissionAction,
     deleteRoleAction,
     updateRoleAction,
+    postNewPermissionAction,
+    deletePermissionAction,
+    updatePermissionAction,
 } from "../../redux/roleAction";
 
 const initialState = {
@@ -76,6 +79,42 @@ export const roleSlice = createSlice({
                 state.roles = action.payload;
             })
             .addCase(updateRoleAction.rejected, (state, action) => {
+                state.isLoading = false;
+                console.error("Error code:", action.payload);
+            })
+            // new permission
+            .addCase(postNewPermissionAction.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(postNewPermissionAction.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.permissions = action.payload;
+            })
+            .addCase(postNewPermissionAction.rejected, (state, action) => {
+                state.isLoading = false;
+                console.error("Error code:", action.payload);
+            })
+            // delete permission
+            .addCase(deletePermissionAction.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(deletePermissionAction.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.permissions = action.payload;
+            })
+            .addCase(deletePermissionAction.rejected, (state, action) => {
+                state.isLoading = false;
+                console.error("Error code:", action.payload);
+            })
+            // update permission
+            .addCase(updatePermissionAction.pending, (state) => {
+                state.isLoading = true;
+            })
+            .addCase(updatePermissionAction.fulfilled, (state, action) => {
+                state.isLoading = false;
+                state.permissions = action.payload;
+            })
+            .addCase(updatePermissionAction.rejected, (state, action) => {
                 state.isLoading = false;
                 console.error("Error code:", action.payload);
             });
