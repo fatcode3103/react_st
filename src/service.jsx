@@ -31,7 +31,7 @@ export const addNewRole = async (data) => {
 };
 
 export const getPermissons = async () => {
-    let res = await axios.post(`get-permissions`);
+    let res = await axios.get(`get-permissions`);
     return res;
 };
 
